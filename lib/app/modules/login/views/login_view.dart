@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -13,10 +14,40 @@ class LoginView extends GetView<LoginController> {
         title: const Text('LoginView'),
         centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'LoginView is working',
-          style: TextStyle(fontSize: 20),
+      body:  Center(
+        child: Form(
+            key: controller.formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: controller.usernameController,
+                  decoration: InputDecoration(hintText: "Masukan Username"),
+                  validator: (value){
+                    if (value!.length < 5){
+                      return "Username tidak boleh kosong";
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: controller.passwordController,
+                  decoration: InputDecoration(hintText: "Masukan Password"),
+                  validator: (value){
+                    if (value!.length < 5){
+                      return "Password tidak boleh kosong";
+                    }
+                    return null;
+                  },
+                ),
+                Obx(() => controller.loading.value?
+                CircularProgressIndicator():
+                ElevatedButton(onPressed: (){
+                  controller.login();
+                }, child: Text("login"))),
+                ElevatedButton(onPressed: () => Get.toNamed(Routes.REGISTER),
+                child: const Text("daftar"))
+              ],
+            )
         ),
       ),
     );
