@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_juldan_peminjam/app/data/model/response_login.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constan/endpoint.dart';
@@ -54,7 +55,9 @@ class LoginController extends GetxController {
               "password": passwordController.text.toString()
             }));
         if (response.statusCode == 200) {
+          ResponseLogin responseLogin=ResponseLogin.fromJson(response.data);
           await StorageProvider.write(StorageKey.status, "logges");
+          await StorageProvider.write(StorageKey.idUser, responseLogin.data!.id!.toString());
           Get.offAllNamed(Routes.HOME);
         } else {
           Get.snackbar("Sorry", "Login gagal", backgroundColor: Colors.orange);
